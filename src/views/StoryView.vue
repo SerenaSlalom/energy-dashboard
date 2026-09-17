@@ -26,6 +26,19 @@ const projectedRiskWindow =
 
 <template>
   <main id="top">
+    <!-- Intro -->
+    <section class="vf-section" style="padding-block: var(--vf-space-2xl) var(--vf-space-lg)">
+      <div class="vf-container vf-stack" style="gap: var(--vf-space-md); max-width: 70ch">
+        <h1 class="vf-display-lg">Two Peaks, Four Seasons</h1>
+        <p class="vf-body-md" style="color: var(--vf-muted)">
+          Two Peaks, Four Seasons is a data story about citywide electricity demand — and the
+          seasonal shape-shifting hiding behind the number everyone quotes. Solar is shrinking the
+          midday peak. EV charging is building a sharper one after dark. And the pattern is
+          spreading beyond summer.
+        </p>
+      </div>
+    </section>
+
     <!-- Explore / primary interaction -->
     <section id="explore" class="vf-section" :data-season="season">
       <div class="vf-container vf-stack" style="gap: var(--vf-space-xl)">
