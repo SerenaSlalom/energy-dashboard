@@ -1,0 +1,430 @@
+/* ==========================================================================
+   Two Peaks, Four Seasons — app theme
+   Layers a seasonal accent + app-specific components on top of the ported
+   Verda Finance tokens (verda-design-system.css). Verda's own rule of "one
+   accent only" still governs peak-risk callouts and AI insight cards, which
+   stay Mint Voltage everywhere. The seasonal accent below is a second,
+   narrower signal reserved for the load-curve chart and season chrome —
+   never used on CTAs, callouts, or text.
+   ========================================================================== */
+
+:root {
+  --season-summer: #f2b33d;
+  --season-summer-soft: rgba(242, 179, 61, 0.16);
+  --season-winter: #6fa8d9;
+  --season-winter-soft: rgba(111, 168, 217, 0.16);
+  --season-spring: #7fcb9e;
+  --season-spring-soft: rgba(127, 203, 158, 0.16);
+  --season-fall: #d98a52;
+  --season-fall-soft: rgba(217, 138, 82, 0.16);
+
+  --solar-line: #ffd166;
+
+  /* Active season accent, switched by data-season on the app root. */
+  --season-accent: var(--season-summer);
+  --season-accent-soft: var(--season-summer-soft);
+}
+
+[data-season='summer'] {
+  --season-accent: var(--season-summer);
+  --season-accent-soft: var(--season-summer-soft);
+}
+
+[data-season='winter'] {
+  --season-accent: var(--season-winter);
+  --season-accent-soft: var(--season-winter-soft);
+}
+
+[data-season='spring'] {
+  --season-accent: var(--season-spring);
+  --season-accent-soft: var(--season-spring-soft);
+}
+
+[data-season='fall'] {
+  --season-accent: var(--season-fall);
+  --season-accent-soft: var(--season-fall-soft);
+}
+
+* {
+  transition: background-color 320ms var(--vf-ease), border-color 320ms var(--vf-ease);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, var(--season-accent-soft), transparent 60%),
+    var(--vf-surface);
+}
+
+.tp-app {
+  min-height: 100vh;
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+.tp-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background-color: rgba(11, 20, 16, 0.86);
+  backdrop-filter: none;
+  border-bottom: 1px solid var(--vf-border);
+}
+
+.tp-header__mark {
+  width: 26px;
+  height: 26px;
+  color: var(--vf-mint);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Section rhythm
+   -------------------------------------------------------------------------- */
+.tp-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vf-space-sm);
+  margin-bottom: var(--vf-space-md);
+}
+
+.tp-section-label__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--season-accent);
+}
+
+.tp-eyebrow {
+  font-family: var(--vf-font-body);
+  font-weight: 500;
+  font-size: var(--vf-label-sm-size);
+  letter-spacing: var(--vf-label-sm-tracking);
+  text-transform: uppercase;
+  color: var(--vf-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+.tp-hero__stat-left {
+  position: absolute;
+  left: max(0px, calc((100% - var(--vf-container-max)) / 2 - 40px));
+  top: 12%;
+}
+
+.tp-hero__stat-right {
+  position: absolute;
+  right: max(0px, calc((100% - var(--vf-container-max)) / 2 - 40px));
+  bottom: 8%;
+}
+
+@media (max-width: 1080px) {
+  .tp-hero__stat-left,
+  .tp-hero__stat-right {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .vf-hero__title.vf-display-xl {
+    font-size: clamp(2rem, 10vw, 2.75rem);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Season selector (extends .vf-tabs)
+   -------------------------------------------------------------------------- */
+.tp-season-tabs {
+  flex-wrap: wrap;
+}
+
+.tp-season-tabs .vf-tabs__tab.is-active {
+  background-color: var(--season-accent);
+  color: var(--vf-charcoal-ink);
+}
+
+.tp-season-tabs .vf-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tp-season-tabs__swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+  opacity: 0.55;
+}
+
+.tp-season-tabs .vf-tabs__tab.is-active .tp-season-tabs__swatch {
+  background-color: var(--vf-charcoal-ink);
+  opacity: 0.6;
+}
+
+/* --------------------------------------------------------------------------
+   Chart panel
+   -------------------------------------------------------------------------- */
+.tp-chart-card {
+  position: relative;
+}
+
+.tp-chart-card__canvas-wrap {
+  position: relative;
+  height: 360px;
+}
+
+@media (max-width: 640px) {
+  .tp-chart-card__canvas-wrap {
+    height: 280px;
+  }
+}
+
+.tp-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vf-space-lg);
+}
+
+.tp-chart-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--vf-font-body);
+  font-size: var(--vf-body-sm-size);
+  color: var(--vf-muted);
+}
+
+.tp-chart-legend__swatch {
+  width: 20px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.tp-chart-legend__swatch--dashed {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--solar-line) 0 6px,
+    transparent 6px 10px
+  );
+}
+
+.tp-chart-hint {
+  position: absolute;
+  top: var(--vf-space-lg);
+  right: var(--vf-space-lg);
+  color: var(--vf-muted);
+}
+
+/* --------------------------------------------------------------------------
+   AI Insight panel — Verda's single mint accent carries this, deliberately
+   distinct from the seasonal chart chrome above.
+   -------------------------------------------------------------------------- */
+.tp-insight {
+  position: relative;
+  background-color: var(--vf-bark);
+  border: 1px solid var(--vf-border);
+  border-left: 3px solid var(--vf-mint);
+  border-radius: var(--vf-radius-lg);
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 100%;
+}
+
+.tp-insight__empty {
+  color: var(--vf-muted);
+  font-size: var(--vf-body-md-size);
+  line-height: var(--vf-body-md-line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.tp-insight__badge {
+  align-self: flex-start;
+}
+
+.tp-insight__title {
+  font-family: var(--vf-font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  margin: 0;
+  color: var(--vf-on-surface);
+}
+
+.tp-insight__summary {
+  color: var(--vf-on-surface);
+  font-size: var(--vf-body-md-size);
+  line-height: var(--vf-body-md-line);
+  margin: 0;
+}
+
+.tp-insight__breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tp-insight__bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tp-insight__bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--vf-body-sm-size);
+  color: var(--vf-muted);
+}
+
+.tp-insight__bar-label span:last-child {
+  font-family: var(--vf-font-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--vf-on-surface);
+  font-weight: 700;
+}
+
+.tp-insight__bar-track {
+  height: 6px;
+  border-radius: var(--vf-radius-pill);
+  background-color: var(--vf-ink);
+  overflow: hidden;
+}
+
+.tp-insight__bar-fill {
+  height: 100%;
+  background-color: var(--vf-mint);
+  border-radius: var(--vf-radius-pill);
+}
+
+.tp-insight__implication {
+  font-family: var(--vf-font-body);
+  font-style: italic;
+  color: var(--vf-spring);
+  font-size: var(--vf-body-sm-size);
+  line-height: var(--vf-body-md-line);
+  margin: 0;
+  padding-top: 4px;
+  border-top: 1px solid var(--vf-border);
+}
+
+.tp-insight__delta {
+  align-self: flex-start;
+}
+
+/* --------------------------------------------------------------------------
+   Sector toggle
+   -------------------------------------------------------------------------- */
+.tp-sector-toggle {
+  padding: 4px;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.tp-chart-card {
+  min-width: 0;
+}
+
+.tp-chart-card__canvas-wrap {
+  min-width: 0;
+}
+
+.tp-sector-toggle .vf-tabs__tab {
+  padding: 8px 14px;
+  font-size: var(--vf-body-sm-size);
+}
+
+/* --------------------------------------------------------------------------
+   Narrative caption block (copy shifts with the selected season)
+   -------------------------------------------------------------------------- */
+.tp-narrative {
+  border-left: 2px solid var(--season-accent);
+  padding-left: var(--vf-space-lg);
+}
+
+/* --------------------------------------------------------------------------
+   Trend view
+   -------------------------------------------------------------------------- */
+.tp-trend-chart {
+  position: relative;
+  height: 320px;
+}
+
+@media (max-width: 640px) {
+  .tp-trend-chart {
+    height: 260px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Methodology modal
+   -------------------------------------------------------------------------- */
+.tp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(6, 10, 8, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--vf-space-lg);
+  z-index: 100;
+}
+
+.tp-modal {
+  max-width: 560px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Fade-in on scroll
+   -------------------------------------------------------------------------- */
+.tp-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 560ms var(--vf-ease), transform 560ms var(--vf-ease);
+}
+
+.tp-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tp-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+.tp-footer {
+  border-top: 1px solid var(--vf-border);
+}
