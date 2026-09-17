@@ -6,7 +6,6 @@ import SeasonSelector from '@/components/SeasonSelector.vue'
 import SectorToggle from '@/components/SectorToggle.vue'
 import LoadCurveChart from '@/components/LoadCurveChart.vue'
 import InsightPanel from '@/components/InsightPanel.vue'
-import StatCard from '@/components/StatCard.vue'
 import TrendProjectionView from '@/components/TrendProjectionView.vue'
 import RevealSection from '@/components/RevealSection.vue'
 import { SEASON_COLORS } from '@/data/season-colors'
@@ -23,101 +22,64 @@ const currentSolarPct = trend.historical.solarAdoptionPct[lastHistorical] ?? 0
 const currentEvPct = trend.historical.evAdoptionPct[lastHistorical] ?? 0
 const projectedRiskWindow =
   trend.projection.riskWindowMonths[trend.projection.riskWindowMonths.length - 1] ?? 0
-const projected2030Solar =
-  trend.projection.solarAdoptionPct[trend.projection.solarAdoptionPct.length - 1] ?? 0
 </script>
 
 <template>
   <main id="top">
-    <!-- Hero -->
-    <section class="vf-section vf-hero" style="position: relative">
-      <StatCard
-        class="tp-hero__stat-left"
-        label="In a typical summer day"
-        value="2 Peaks"
-        tilt="left"
-      />
-      <StatCard
-        class="tp-hero__stat-right"
-        label="Solar adoption since 2019"
-        :value="`+${currentSolarPct - (trend.historical.solarAdoptionPct[0] ?? 0)}pp`"
-        tilt="right"
-      />
+    <!-- Explore / primary interaction -->
+    <section id="explore" class="vf-section" :data-season="season">
+      <div class="vf-container vf-stack" style="gap: var(--vf-space-xl)">
+        <div class="tp-section-label">
+          <span class="tp-section-label__dot" />
+          <span class="tp-eyebrow">The core interaction</span>
+        </div>
 
-      <div class="vf-container">
-        <h1 class="vf-display-xl vf-hero__title">
-          Every grid has one obvious peak.
-          <span class="vf-highlight">This one has two.</span>
-        </h1>
-        <p class="vf-body-md vf-hero__body">
-          Two Peaks, Four Seasons is a data story about citywide electricity demand — and the
-          seasonal shape-shifting hiding behind the number everyone quotes. Solar is shrinking the
-          midday peak. EV charging is building a sharper one after dark. And the pattern is
-          spreading beyond summer.
-        </p>
-        <div class="vf-hero__actions">
-          <a href="#explore" class="vf-btn vf-btn--primary">Explore the load curve</a>
-          <a href="#trend" class="vf-btn vf-btn--secondary">Skip to the trend</a>
+        <div class="vf-row" style="justify-content: space-between; flex-wrap: wrap; gap: var(--vf-space-lg)">
+          <h2 class="vf-display-lg" style="max-width: 20ch">
+            Reshape the day, season by season
+          </h2>
+          <SeasonSelector />
+        </div>
+
+        <transition name="fade" mode="out-in">
+          <div :key="season" class="tp-narrative" :style="{ borderLeftColor: seasonColor }">
+            <p class="tp-eyebrow" style="margin-bottom: 6px">{{ narrative.kicker }}</p>
+            <h3 class="vf-headline-md" style="margin-bottom: 8px">{{ narrative.heading }}</h3>
+            <p class="vf-body-md" style="color: var(--vf-muted); max-width: 70ch">
+              {{ narrative.body }}
+            </p>
+          </div>
+        </transition>
+
+        <div class="explore-grid">
+          <div class="vf-card tp-chart-card">
+            <div class="vf-row" style="justify-content: space-between; flex-wrap: wrap; gap: var(--vf-space-sm)">
+              <h4 class="vf-headline-md" style="font-size: 1.1rem">
+                {{ energy.seasons[season].label }} — typical day, {{ energy.seasons[season].months }}
+              </h4>
+              <SectorToggle />
+            </div>
+            <LoadCurveChart />
+            <div class="tp-chart-legend">
+              <span class="tp-chart-legend__item">
+                <span class="tp-chart-legend__swatch" :style="{ backgroundColor: seasonColor }" />
+                Total grid demand
+              </span>
+              <span class="tp-chart-legend__item">
+                <span class="tp-chart-legend__swatch tp-chart-legend__swatch--dashed" />
+                Solar generation
+              </span>
+              <span class="tp-chart-legend__item">
+                <span class="tp-chart-legend__swatch" style="background-color: var(--vf-mint)" />
+                Peak / dip — click to inspect
+              </span>
+            </div>
+          </div>
+
+          <InsightPanel />
         </div>
       </div>
     </section>
-
-    <!-- Explore / primary interaction -->
-    <RevealSection>
-      <section id="explore" class="vf-section" :data-season="season">
-        <div class="vf-container vf-stack" style="gap: var(--vf-space-xl)">
-          <div class="tp-section-label">
-            <span class="tp-section-label__dot" />
-            <span class="tp-eyebrow">The core interaction</span>
-          </div>
-
-          <div class="vf-row" style="justify-content: space-between; flex-wrap: wrap; gap: var(--vf-space-lg)">
-            <h2 class="vf-display-lg" style="max-width: 20ch">
-              Reshape the day, season by season
-            </h2>
-            <SeasonSelector />
-          </div>
-
-          <transition name="fade" mode="out-in">
-            <div :key="season" class="tp-narrative" :style="{ borderLeftColor: seasonColor }">
-              <p class="tp-eyebrow" style="margin-bottom: 6px">{{ narrative.kicker }}</p>
-              <h3 class="vf-headline-md" style="margin-bottom: 8px">{{ narrative.heading }}</h3>
-              <p class="vf-body-md" style="color: var(--vf-muted); max-width: 70ch">
-                {{ narrative.body }}
-              </p>
-            </div>
-          </transition>
-
-          <div class="explore-grid">
-            <div class="vf-card tp-chart-card">
-              <div class="vf-row" style="justify-content: space-between; flex-wrap: wrap; gap: var(--vf-space-sm)">
-                <h4 class="vf-headline-md" style="font-size: 1.1rem">
-                  {{ energy.seasons[season].label }} — typical day, {{ energy.seasons[season].months }}
-                </h4>
-                <SectorToggle />
-              </div>
-              <LoadCurveChart />
-              <div class="tp-chart-legend">
-                <span class="tp-chart-legend__item">
-                  <span class="tp-chart-legend__swatch" :style="{ backgroundColor: seasonColor }" />
-                  Total grid demand
-                </span>
-                <span class="tp-chart-legend__item">
-                  <span class="tp-chart-legend__swatch tp-chart-legend__swatch--dashed" />
-                  Solar generation
-                </span>
-                <span class="tp-chart-legend__item">
-                  <span class="tp-chart-legend__swatch" style="background-color: var(--vf-mint)" />
-                  Peak / dip — click to inspect
-                </span>
-              </div>
-            </div>
-
-            <InsightPanel />
-          </div>
-        </div>
-      </section>
-    </RevealSection>
 
     <!-- Why -->
     <RevealSection>

@@ -121,34 +121,6 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   Hero
-   -------------------------------------------------------------------------- */
-.tp-hero__stat-left {
-  position: absolute;
-  left: max(0px, calc((100% - var(--vf-container-max)) / 2 - 40px));
-  top: 12%;
-}
-
-.tp-hero__stat-right {
-  position: absolute;
-  right: max(0px, calc((100% - var(--vf-container-max)) / 2 - 40px));
-  bottom: 8%;
-}
-
-@media (max-width: 1080px) {
-  .tp-hero__stat-left,
-  .tp-hero__stat-right {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .vf-hero__title.vf-display-xl {
-    font-size: clamp(2rem, 10vw, 2.75rem);
-  }
-}
-
-/* --------------------------------------------------------------------------
    Season selector (extends .vf-tabs)
    -------------------------------------------------------------------------- */
 .tp-season-tabs {
