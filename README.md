@@ -1,42 +1,70 @@
-# energy-dashboard
+# Two Peaks, Four Seasons
 
-This template should help get you started developing with Vue 3 in Vite.
+**Live:** https://energy-dashboard-peach-delta.vercel.app
 
-## Recommended IDE Setup
+An interactive data story about citywide electricity demand — and the seasonal
+shape-shifting behind it. Most people assume a city's grid has one predictable
+peak. This story shows it actually splits into *two* during warm months (a
+shrinking midday peak, thanks to solar, and a sharp new evening peak driven by
+EV charging), and that the pattern is spreading beyond summer as solar and EV
+adoption climb.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Built as a Protogen (P302 — Interactive Data Story) case study. It's a
+project-only build with invented, simplified data — no real utility, city, or
+client data is used anywhere in this project.
 
-## Recommended Browser Setup
+## What it does
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- **Season selector** — the primary control. Reshapes the load curve live
+  across Summer, Winter, Spring, and Fall.
+- **Sector toggle** — isolates residential, commercial, or industrial load on
+  top of total demand.
+- **Clickable peak/dip markers** — surface an AI-style insight card breaking
+  down what's driving that moment in the curve, in plain language.
+- **Trend/projection view** — shows the two-peak "risk window" widening over
+  time as solar and EV adoption grow.
 
-## Type Support for `.vue` Imports in TS
+Full context on the target user, key features, and design direction lives in
+[BRIEF.md](./BRIEF.md).
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Tech stack
 
-## Customize configuration
+- Vue 3 + Vite + TypeScript + Vue Router
+- [Chart.js](https://www.chartjs.org/) via `vue-chartjs` for the load curves
+- A ported [Verda Finance](./.claude/context/design-system.md) design system,
+  layered with a season-shifting accent for this project
+- Static, generated mock dataset (`src/data/energy-usage.json`) — see
+  [data model notes](./.claude/context/data-model.md) for how it's shaped
+- Deployed to Vercel, connected to this repo for auto-deploy on push to `main`
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## Getting started
 
 ```sh
 npm install
+npm run dev      # local dev server
+npm run build    # type-check + production build
 ```
 
-### Compile and Hot-Reload for Development
+## Project structure
 
-```sh
-npm run dev
+```
+src/
+  assets/         # ported design system CSS + season theming layer
+  components/     # chart, controls, insight panel, header, modal
+  composables/    # shared season/sector state (no Pinia — see CLAUDE.md)
+  data/           # mock dataset, narrative copy, season color constants
+  types/          # shared TypeScript types for the dataset
+  views/          # StoryView.vue — the single narrative page
 ```
 
-### Type-Check, Compile and Minify for Production
+## AI scaffolding
 
-```sh
-npm run build
-```
+This repo was built with Claude Code. [`CLAUDE.md`](./CLAUDE.md) has the
+project overview and conventions an AI agent (or a new contributor) needs;
+[`.claude/context/`](./.claude/context/) has deeper notes on specific
+decisions (the design system adaptation, the mock data model) that didn't
+belong in `CLAUDE.md` itself.
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
