@@ -1,6 +1,12 @@
 {
   "name": "energy-dashboard",
   "version": "0.0.0",
+  "description": "Two Peaks, Four Seasons — an interactive data story about seasonal electricity demand (Protogen P302 case study).",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SerenaSlalom/energy-dashboard.git"
+  },
   "private": true,
   "type": "module",
   "scripts": {
